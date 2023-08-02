@@ -1,0 +1,25 @@
+import os
+
+def find_last_folder(start_folder):
+    queue = [(start_folder, 0)]  # Klasörleri ve seviyelerini içeren bir kuyruk oluşturuyoruz
+    last_folder = None  # En son klasörü temsil edecek değişken
+    max_level = 0  # En son klasörün seviyesini takip edecek değişken
+
+    while queue:
+        current_folder, level = queue.pop(0)  # Kuyruktan bir öğe alıyoruz
+
+        if level > max_level:  # Eğer bu seviye, en son klasör seviyesinden büyükse, en son klasörü güncelle
+            last_folder = current_folder
+            max_level = level
+
+        if os.path.isdir(current_folder):  # Eğer klasöre aitse, içindekileri kuyruğa ekliyoruz
+            for item in os.listdir(current_folder):
+                item_path = os.path.join(current_folder, item)
+                queue.append((item_path, level + 1))
+
+    return last_folder
+
+# Kullanım örneği:
+root_folder = "C:/Users/guls1/OneDrive/Masaüstü/a"
+last_folder = find_last_folder(root_folder)
+print("En son klasör:", last_folder)
